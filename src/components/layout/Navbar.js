@@ -1,9 +1,10 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import withStyles from "@material-ui/core/styles/withStyles"
+import withStyles from "@material-ui/core/styles/withStyles";
 import PropTypes from "prop-types";
-import {logoutUser} from "../../redux/actions/userActions"
+import { logoutUser } from "../../redux/actions/userActions";
+import Events from "../events/Events"
 //add post events
 //add my button
 import AppBar from "@material-ui/core/AppBar";
@@ -12,32 +13,36 @@ import Button from "@material-ui/core/Button";
 //icons
 //we'll try importing icons later
 const styles = (theme) => ({
-    ...theme.spreadThis
-})
+  ...theme.spreadThis,
+});
 export class Navbar extends Component {
-    constructor(props){
-        super(props);
-        console.log(this.props);
-    }
-    handleLogout = () => {
-        this.props.logoutUser();
-    }
+  constructor(props) {
+    super(props);
+    console.log(this.props);
+  }
+  handleLogout = () => {
+    this.props.logoutUser();
+  };
   render() {
-    const { authenticated, classes } = this.props;
+    const {
+      user: { authenticated },
+      classes,
+    } = this.props;
     return (
       <AppBar position="fixed">
         <ToolBar className="nav-container">
           {authenticated ? (
             <Fragment>
-                <Button
+              <Button
                 color="inherit"
                 className={classes.navbarDesign}
                 onClick={this.handleLogout}
                 component={Link}
                 to="/"
-                >
-                    Logout
-                </Button>
+              >
+                Logout
+              </Button>
+              <Events />
             </Fragment>
           ) : (
             <Fragment>
@@ -58,13 +63,16 @@ export class Navbar extends Component {
   }
 }
 const mapStateToProps = (state) => ({
-    user: state.user
-})
+  user: state.user,
+});
 const mapActionsToProps = {
-    logoutUser,
-}
+  logoutUser,
+};
 Navbar.propTypes = {
-    logoutUser: PropTypes.func.isRequired,
-    user: PropTypes.object.isRequired
-}
-export default connect(mapStateToProps, mapActionsToProps)(withStyles(styles)(Navbar))
+  logoutUser: PropTypes.func.isRequired,
+  user: PropTypes.object.isRequired,
+};
+export default connect(
+  mapStateToProps,
+  mapActionsToProps
+)(withStyles(styles)(Navbar));
