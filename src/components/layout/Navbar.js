@@ -4,7 +4,9 @@ import { connect } from "react-redux";
 import withStyles from "@material-ui/core/styles/withStyles";
 import PropTypes from "prop-types";
 import { logoutUser } from "../../redux/actions/userActions";
-import Events from "../events/Events"
+import Events from "../events/Events";
+import SubdirectoryArrowLeftIcon from "@material-ui/icons/SubdirectoryArrowLeft";
+import MyButton from "../../util/MyButton";
 //add post events
 //add my button
 import AppBar from "@material-ui/core/AppBar";
@@ -33,15 +35,14 @@ export class Navbar extends Component {
         <ToolBar className="nav-container">
           {authenticated ? (
             <Fragment>
-              <Button
-                color="inherit"
-                className={classes.navbarDesign}
+              <MyButton
+                tip="Logout"
                 onClick={this.handleLogout}
                 component={Link}
                 to="/"
               >
-                Logout
-              </Button>
+                <SubdirectoryArrowLeftIcon />
+              </MyButton>
               <Events />
             </Fragment>
           ) : (

@@ -10,6 +10,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import AddIcon from "@material-ui/icons/Add";
 import CloseIcon from "@material-ui/icons/Close";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import MyButton from "../../util/MyButton";
 //Redux
 import { connect } from "react-redux";
 import { postEvents, clearErrors } from "../../redux/actions/dataActions";
@@ -30,14 +31,18 @@ const styles = (theme) => ({
   },
 });
 export class Events extends Component {
-  state = {
-    open: false,
-    event: "",
-    attendants: 0,
-    startDate: "",
-    endDate: "",
-    location: "",
-  };
+  constructor() {
+    super();
+    this.state = {
+      open: false,
+      event: "",
+      attendants: 0,
+      startDate: "",
+      endDate: "",
+      location: "",
+    };
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.UI.errors) {
       this.setState({
@@ -52,7 +57,7 @@ export class Events extends Component {
         endDate: "",
         location: "",
         event: "",
-        errors: {}
+        errors: {},
       });
     }
   }
@@ -86,52 +91,50 @@ export class Events extends Component {
     } = this.props;
     return (
       <Fragment>
-        <Button onClick={this.handleOpen} tip="Add a new Event">
+        <MyButton onClick={this.handleOpen} tip="Add a new Event">
           <AddIcon />
-        </Button>
-        <DialogTitle>Create a new Event</DialogTitle>
-        <DialogContent>
-          <form onSubmit={this.handleSubmit}>
-            <TextField 
-              name="body"
-              type="text"
-              label="Event"
-              placeholder="Name of your event"
-              error={errors.event ? true : false}
-              helperText={errors.event}
-              className={classes.textField}
-              onChange={this.handleChange}
-              fullWidth
-            />
-            <TextField
-              name="attendants"
-              type="number"
-              label="Attendants"
-              placeholder="Enter the number of attendants at your event"
-              error={errors.attendants ? true : false}
-              helperText={errors.attendants}
-              className={classes.textField}
-              onChange={this.handleChange}
-              fullWidth
-            />
-
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              className={classes.submitButton}
-              disabled={loading}
-            >
-              Submit
-              {loading && (
-                <CircularProgress
-                  size={30}
-                  className={classes.progressSpinner}
-                />
-              )}
-            </Button>
-          </form>
-        </DialogContent>
+        </MyButton>
+        <Dialog
+          open={this.state.open}
+          onClose={this.handleClose}
+          fullWidth
+          maxWidth="sm"
+        >
+          <Button
+            tip="Close"
+            onClick={this.handleClose}
+            tipClassName={classes.closeButton}
+          >
+            <CloseIcon />
+          </Button>
+          <DialogContent>
+            <form onSubmit={this.handleSubmit}>
+              <TextField
+                id="event"
+                type="text"
+                label="Event"
+                placeholder="Add an event"
+                className={classes.textField}
+                fullWidth
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className={classes.submitButton}
+                disabled={loading}
+              >
+                Submit
+                {loading && (
+                  <CircularProgress
+                    size={30}
+                    className={classes.progressSpinner}
+                  />
+                )}
+              </Button>
+            </form>
+          </DialogContent>
+        </Dialog>
       </Fragment>
     );
   }
@@ -143,7 +146,9 @@ Events.propTypes = {
 };
 const mapStateToProps = (state) => ({
   UI: state.UI,
+  user: state.user
 });
+const mapActionsToProps = {postEvents}
 export default connect(mapStateToProps, { postEvents, clearErrors })(
   withStyles(styles)(Events)
 );
